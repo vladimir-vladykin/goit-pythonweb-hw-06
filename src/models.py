@@ -15,3 +15,9 @@ class Teacher(Base):
     __tablename__ = "teachers"
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(nullable=False)
+
+
+class Group(Base):
+    __tablename__ = "groups"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(nullable=False)

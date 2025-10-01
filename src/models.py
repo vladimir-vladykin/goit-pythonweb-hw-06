@@ -8,7 +8,10 @@ class Base(DeclarativeBase):
 class Student(Base):
     __tablename__ = "students"
     id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(nullable=False)
 
 
-if __name__ == "__main__":
-    print("Compile successfull")
+class Teacher(Base):
+    __tablename__ = "teachers"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(nullable=False)

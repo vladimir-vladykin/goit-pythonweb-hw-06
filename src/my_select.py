@@ -4,37 +4,13 @@ from models import Student, Grade, Group, Subject
 
 
 def run_selects():
-    selects = [select_1, select_2]
+    selects = [select_1, select_2, select_3]
 
     for select in selects:
-        print(f"Execute {select.__name__}()")
+        print(f"\nExecute {select.__name__}()")
+        print("-" * 40)
         select()
         print("-" * 40)
-
-
-def example():
-    q = (
-        session.execute(
-            select(
-                Student.name,
-                Group.name.label("group_name"),
-                Subject.name.label("subject_name"),
-                Grade.value.label("grade"),
-            )
-            .select_from(Student)
-            .join(Group)
-            .join(Grade)
-            .join(Subject)
-            .order_by(Student.id)
-            .limit(10)
-        )
-        .mappings()
-        .all()
-    )
-
-    print(q)
-
-    session.close()
 
 
 def select_1():
@@ -56,7 +32,6 @@ def select_1():
     )
 
     print(q)
-
     session.close()
 
 
@@ -80,7 +55,31 @@ def select_2():
     )
 
     print(q)
+    session.close()
 
+
+def select_3():
+    subject_name = "Analysis"
+    q = (
+        session.execute(
+            select(
+                Group.id, 
+                Group.name,
+                func.avg(Grade.value).label("group_average_grade"),
+            )
+            .select_from(Student)
+            .join(Group)
+            .join(Grade)
+            .join(Subject)
+            .where(Subject.name == subject_name)
+            .group_by(Group.id, Group.name, Subject.name)
+            .order_by(Group.id)
+        )
+        .mappings()
+        .all()
+    )
+
+    print(q)
     session.close()
 
 

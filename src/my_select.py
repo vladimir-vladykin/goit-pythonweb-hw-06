@@ -4,7 +4,7 @@ from models import Student, Grade, Group, Subject, Teacher
 
 
 def run_selects():
-    selects = [select_1, select_2, select_3, select_4, select_5, select_6, select_7, select_8]
+    selects = [select_1, select_2, select_3, select_4, select_5, select_6, select_7, select_8, select_9]
 
     for select in selects:
         print(f"\nExecute {select.__name__}()")
@@ -192,6 +192,29 @@ def select_8():
         )
         .mappings()
         .first()
+    )
+
+    print(q)
+    session.close()
+
+
+def select_9():
+    student_id = 20
+
+    q = (
+        session.execute(
+            select(
+                Student.name.label("student_name"),
+                Subject.name.label("subject_name")
+            )
+            .select_from(Student)
+            .join(Grade)
+            .join(Subject)
+            .where(Student.id == student_id)
+            .order_by(Subject.name)
+        )
+        .mappings()
+        .all()
     )
 
     print(q)

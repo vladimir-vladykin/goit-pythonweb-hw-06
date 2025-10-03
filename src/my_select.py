@@ -4,7 +4,18 @@ from models import Student, Grade, Group, Subject, Teacher
 
 
 def run_selects():
-    selects = [select_1, select_2, select_3, select_4, select_5, select_6, select_7, select_8, select_9]
+    selects = [
+        select_1,
+        select_2,
+        select_3,
+        select_4,
+        select_5,
+        select_6,
+        select_7,
+        select_8,
+        select_9,
+        select_10,
+    ]
 
     for select in selects:
         print(f"\nExecute {select.__name__}()")
@@ -182,7 +193,7 @@ def select_8():
             select(
                 Teacher.id.label("teacher_id"),
                 Teacher.name.label("teacher_name"),
-                func.avg(Grade.value).label("average_grade_from_teacher")
+                func.avg(Grade.value).label("average_grade_from_teacher"),
             )
             .select_from(Teacher)
             .join(Subject)
@@ -204,13 +215,38 @@ def select_9():
     q = (
         session.execute(
             select(
-                Student.name.label("student_name"),
-                Subject.name.label("subject_name")
+                Student.name.label("student_name"), Subject.name.label("subject_name")
             )
             .select_from(Student)
             .join(Grade)
             .join(Subject)
             .where(Student.id == student_id)
+            .order_by(Subject.name)
+        )
+        .mappings()
+        .all()
+    )
+
+    print(q)
+    session.close()
+
+
+def select_10():
+    student_id = 40
+    teacher_id = 1
+
+    q = (
+        session.execute(
+            select(
+                Student.name.label("student_name"), 
+                Teacher.name.label("teacher_name"),
+                Subject.name.label("subject_name")
+            )
+            .select_from(Student)
+            .join(Grade)
+            .join(Subject)
+            .join(Teacher)
+            .where(Student.id == student_id, Teacher.id == teacher_id)
             .order_by(Subject.name)
         )
         .mappings()

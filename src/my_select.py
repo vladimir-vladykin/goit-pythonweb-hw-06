@@ -1,10 +1,10 @@
 from sqlalchemy import select, func, desc
 from connect import session
-from models import Student, Grade, Group, Subject
+from models import Student, Grade, Group, Subject, Teacher
 
 
 def run_selects():
-    selects = [select_1, select_2, select_3, select_4]
+    selects = [select_1, select_2, select_3, select_4, select_5]
 
     for select in selects:
         print(f"\nExecute {select.__name__}()")
@@ -98,6 +98,27 @@ def select_4():
             .join(Grade)
             .where(Student.group_id == group_id)
             .group_by(Group.id, Group.name)
+        )
+        .mappings()
+        .all()
+    )
+
+    print(q)
+    session.close()
+
+
+def select_5():
+    teacher_id = 2
+
+    q = (
+        session.execute(
+            select(
+                Teacher.name.label("teacher_name"),
+                Subject.name.label("subject_name")
+            )
+            .select_from(Teacher)
+            .join(Subject)
+            .where(Teacher.id == teacher_id)
         )
         .mappings()
         .all()
